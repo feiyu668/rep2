@@ -1,6 +1,7 @@
 import { Router, type IRouter, type Request, type Response } from "express";
 import OpenAI from "openai";
 import Anthropic from "@anthropic-ai/sdk";
+import { logger } from "../lib/logger";
 
 const router: IRouter = Router();
 
@@ -241,6 +242,16 @@ router.post("/chat/completions", async (req: Request, res: Response) => {
     return;
   }
 
+  logger.info({
+    endpoint: "chat/completions",
+    model,
+    stream,
+    max_tokens,
+    temperature,
+    tool_count: tools?.length ?? 0,
+    extra: Object.keys(rest).length > 0 ? rest : undefined,
+  }, "incoming request params");
+
   try {
     if (isOpenAIModel(model)) {
       const params: OpenAI.ChatCompletionCreateParams = {
@@ -476,6 +487,17 @@ router.post("/messages", async (req: Request, res: Response) => {
     res.status(400).json({ error: { message: "model is required", type: "invalid_request_error" } });
     return;
   }
+
+  logger.info({
+    endpoint: "messages",
+    model,
+    stream,
+    max_tokens,
+    temperature,
+    has_system: !!system,
+    tool_count: tools?.length ?? 0,
+    extra: Object.keys(rest).length > 0 ? rest : undefined,
+  }, "incoming request params");
 
   try {
     if (isClaudeModel(model)) {
