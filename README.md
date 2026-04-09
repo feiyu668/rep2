@@ -10,6 +10,7 @@
 代理通过 Replit 的 AI Integrations 转发请求，如果还没有激活，需要开启一下
 
 
+网关代理通过 Replit 的 AI Integrations 转发请求，如果还没有激活，帮我开启一下
 
 
 ## 遇到"Adjust settings"页面时，你需要做的是：
